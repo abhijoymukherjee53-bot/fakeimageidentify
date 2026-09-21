@@ -1,105 +1,543 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CIFAKE Image Classifier</title>
 
 ```
+<title>CIFAKE | AI Image Detector</title>
+
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
     * {
-        box-sizing: border-box;
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
     }
 
     body {
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        font-family: 'Inter', sans-serif;
         min-height: 100vh;
+
+        background:
+            radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.35), transparent 30%),
+            radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.35), transparent 30%),
+            linear-gradient(135deg, #0f172a, #1e1b4b, #111827);
+
+        color: white;
+
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 20px;
+
+        padding: 30px;
     }
+
+
+    /* Main Card */
 
     .container {
         width: 100%;
-        max-width: 600px;
-        background: white;
-        padding: 35px;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        max-width: 700px;
+
+        background: rgba(255, 255, 255, 0.08);
+
+        border: 1px solid rgba(255, 255, 255, 0.15);
+
+        backdrop-filter: blur(20px);
+
+        border-radius: 28px;
+
+        padding: 45px;
+
+        box-shadow:
+            0 25px 70px rgba(0, 0, 0, 0.45),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
         text-align: center;
+
+        animation: fadeIn 0.8s ease;
     }
+
+
+    @keyframes fadeIn {
+
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+
+    /* Logo */
+
+    .logo {
+        width: 75px;
+        height: 75px;
+
+        margin: 0 auto 20px;
+
+        border-radius: 22px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 38px;
+
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+
+        box-shadow:
+            0 10px 30px rgba(99, 102, 241, 0.4);
+
+    }
+
+
+    /* Heading */
 
     h1 {
-        color: #333;
-        margin-bottom: 10px;
+        font-size: 36px;
+
+        font-weight: 800;
+
+        letter-spacing: -1px;
+
+        margin-bottom: 12px;
+
+        background: linear-gradient(
+            90deg,
+            #ffffff,
+            #c7d2fe,
+            #e9d5ff
+        );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
+
 
     .subtitle {
-        color: #666;
-        margin-bottom: 30px;
+
+        color: #cbd5e1;
+
+        font-size: 15px;
+
+        line-height: 1.6;
+
+        max-width: 500px;
+
+        margin: auto;
+
+        margin-bottom: 35px;
     }
+
+
+    /* Upload Area */
 
     .upload-box {
-        border: 2px dashed #667eea;
-        border-radius: 15px;
-        padding: 30px;
-        margin-bottom: 20px;
+
+        border: 2px dashed rgba(165, 180, 252, 0.5);
+
+        border-radius: 20px;
+
+        padding: 35px 25px;
+
+        background: rgba(15, 23, 42, 0.45);
+
+        transition: 0.3s;
+
     }
+
+
+    .upload-box:hover {
+
+        border-color: #a78bfa;
+
+        background: rgba(99, 102, 241, 0.08);
+
+        transform: translateY(-2px);
+
+    }
+
+
+    .upload-icon {
+
+        font-size: 45px;
+
+        margin-bottom: 12px;
+
+    }
+
+
+    .upload-title {
+
+        font-size: 18px;
+
+        font-weight: 600;
+
+        margin-bottom: 7px;
+
+    }
+
+
+    .upload-text {
+
+        color: #94a3b8;
+
+        font-size: 13px;
+
+        margin-bottom: 20px;
+
+    }
+
+
+    /* File Input */
 
     input[type="file"] {
-        margin: 15px 0;
-    }
 
-    button {
-        background: #667eea;
-        color: white;
-        border: none;
-        padding: 12px 30px;
-        border-radius: 8px;
+        width: 100%;
+
+        padding: 12px;
+
+        border-radius: 10px;
+
+        border: 1px solid rgba(255, 255, 255, 0.15);
+
+        background: rgba(255, 255, 255, 0.06);
+
+        color: #cbd5e1;
+
         cursor: pointer;
-        font-size: 16px;
+
+        font-size: 13px;
+
     }
 
-    button:hover {
-        background: #5568d9;
+
+    input[type="file"]::file-selector-button {
+
+        border: none;
+
+        padding: 9px 15px;
+
+        margin-right: 12px;
+
+        border-radius: 8px;
+
+        background: #6366f1;
+
+        color: white;
+
+        cursor: pointer;
+
+        font-weight: 600;
+
     }
+
+
+    /* Preview */
+
+    .preview-container {
+
+        margin-top: 25px;
+
+        display: none;
+
+    }
+
 
     #preview {
-        max-width: 250px;
-        max-height: 250px;
-        margin: 20px auto;
-        border-radius: 10px;
-        display: none;
+
+        max-width: 100%;
+
+        max-height: 300px;
+
+        border-radius: 16px;
+
+        border: 1px solid rgba(255, 255, 255, 0.15);
+
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+
     }
+
+
+    /* Button */
+
+    button {
+
+        width: 100%;
+
+        margin-top: 25px;
+
+        padding: 15px;
+
+        border: none;
+
+        border-radius: 12px;
+
+        background: linear-gradient(
+            135deg,
+            #6366f1,
+            #8b5cf6
+        );
+
+        color: white;
+
+        font-size: 16px;
+
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition: 0.3s;
+
+        box-shadow:
+            0 10px 25px rgba(99, 102, 241, 0.35);
+
+    }
+
+
+    button:hover {
+
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 15px 35px rgba(99, 102, 241, 0.5);
+
+    }
+
+
+    button:disabled {
+
+        opacity: 0.7;
+
+        cursor: not-allowed;
+
+        transform: none;
+
+    }
+
+
+    /* Result */
 
     #result {
-        margin-top: 25px;
-        padding: 20px;
-        border-radius: 10px;
+
+        margin-top: 30px;
+
+        padding: 25px;
+
+        border-radius: 18px;
+
+        background: rgba(15, 23, 42, 0.65);
+
+        border: 1px solid rgba(255, 255, 255, 0.12);
+
         display: none;
-        background: #f3f3f3;
+
+        animation: resultAppear 0.5s ease;
+
     }
+
+
+    @keyframes resultAppear {
+
+        from {
+
+            opacity: 0;
+
+            transform: scale(0.96);
+
+        }
+
+        to {
+
+            opacity: 1;
+
+            transform: scale(1);
+
+        }
+
+    }
+
+
+    .result-title {
+
+        color: #94a3b8;
+
+        font-size: 12px;
+
+        text-transform: uppercase;
+
+        letter-spacing: 2px;
+
+        margin-bottom: 10px;
+
+    }
+
 
     .label {
-        font-size: 24px;
-        font-weight: bold;
+
+        font-size: 30px;
+
+        font-weight: 800;
+
         margin-bottom: 10px;
+
     }
+
 
     .confidence {
-        font-size: 18px;
-        color: #555;
+
+        color: #cbd5e1;
+
+        font-size: 15px;
+
     }
 
-    .error {
-        color: #d32f2f;
-        font-weight: bold;
+
+    /* Loading */
+
+    .loading {
+
+        display: inline-block;
+
+        width: 18px;
+
+        height: 18px;
+
+        border: 3px solid rgba(255, 255, 255, 0.3);
+
+        border-top-color: white;
+
+        border-radius: 50%;
+
+        animation: spin 0.8s linear infinite;
+
+        vertical-align: middle;
+
+        margin-right: 8px;
+
     }
+
+
+    @keyframes spin {
+
+        to {
+            transform: rotate(360deg);
+        }
+
+    }
+
+
+    /* Confidence Bar */
+
+    .confidence-bar {
+
+        height: 8px;
+
+        width: 100%;
+
+        margin-top: 18px;
+
+        border-radius: 20px;
+
+        background: rgba(255, 255, 255, 0.1);
+
+        overflow: hidden;
+
+    }
+
+
+    .confidence-fill {
+
+        height: 100%;
+
+        width: 0%;
+
+        border-radius: 20px;
+
+        background: linear-gradient(
+            90deg,
+            #6366f1,
+            #a855f7
+        );
+
+        transition: width 1s ease;
+
+    }
+
+
+    /* Error */
+
+    .error {
+
+        color: #fca5a5;
+
+        font-weight: 600;
+
+    }
+
+
+    /* Footer */
+
+    .footer {
+
+        margin-top: 28px;
+
+        color: #64748b;
+
+        font-size: 12px;
+
+    }
+
+
+    .footer span {
+
+        color: #a78bfa;
+
+    }
+
+
+    /* Mobile */
+
+    @media (max-width: 600px) {
+
+        body {
+            padding: 15px;
+        }
+
+        .container {
+            padding: 30px 20px;
+            border-radius: 22px;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+        }
+
+        .upload-box {
+            padding: 25px 15px;
+        }
+
+        .label {
+            font-size: 24px;
+        }
+
+    }
+
 </style>
 ```
 
@@ -107,114 +545,431 @@
 
 <body>
 
+```
 <div class="container">
 
-```
-<h1>🔍 CIFAKE Image Classifier</h1>
 
-<p class="subtitle">
-    Upload an image to check whether it looks REAL or AI-GENERATED.
-</p>
+    <div class="logo">
+        🤖
+    </div>
 
-<div class="upload-box">
 
-    <form id="uploadForm">
+    <h1>
+        CIFAKE
+    </h1>
 
-        <input
-            type="file"
-            id="image"
-            name="image"
-            accept=".png,.jpg,.jpeg,.webp,.bmp"
-            required
+
+    <p class="subtitle">
+        AI-Powered Image Detection
+        <br>
+        Analyze an image and identify whether it is
+        <strong>REAL</strong> or <strong>AI-GENERATED</strong>.
+    </p>
+
+
+    <div class="upload-box">
+
+        <div class="upload-icon">
+            🖼️
+        </div>
+
+        <div class="upload-title">
+            Upload your image
+        </div>
+
+        <div class="upload-text">
+            PNG, JPG, JPEG, WEBP or BMP
+        </div>
+
+
+        <form id="uploadForm">
+
+
+            <input
+                type="file"
+                id="image"
+                name="image"
+                accept=".png,.jpg,.jpeg,.webp,.bmp"
+                required
+            >
+
+
+            <div class="preview-container" id="previewContainer">
+
+                <img
+                    id="preview"
+                    alt="Image Preview"
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="analyzeButton"
+            >
+                🔍 Analyze Image
+            </button>
+
+
+        </form>
+
+    </div>
+
+
+    <div id="result">
+
+        <div class="result-title">
+            Detection Result
+        </div>
+
+
+        <div
+            class="label"
+            id="label"
         >
+        </div>
 
-        <br>
 
-        <img id="preview" alt="Image Preview">
+        <div
+            class="confidence"
+            id="confidence"
+        >
+        </div>
 
-        <br>
 
-        <button type="submit">Analyze Image</button>
+        <div class="confidence-bar">
 
-    </form>
+            <div
+                class="confidence-fill"
+                id="confidenceFill"
+            >
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+
+        Powered by
+        <span>
+            TensorFlow
+        </span>
+        • Flask
+        • CIFAKE Model
+
+    </div>
+
 
 </div>
 
-<div id="result">
-    <div class="label" id="label"></div>
-    <div class="confidence" id="confidence"></div>
-</div>
-```
 
-</div>
 
 <script>
-    const form = document.getElementById("uploadForm");
-    const imageInput = document.getElementById("image");
-    const preview = document.getElementById("preview");
-    const result = document.getElementById("result");
 
-    imageInput.addEventListener("change", function () {
 
-        const file = this.files[0];
+    const form =
+        document.getElementById("uploadForm");
 
-        if (file) {
-            preview.src = URL.createObjectURL(file);
-            preview.style.display = "block";
-        }
-    });
 
-    form.addEventListener("submit", async function (event) {
+    const imageInput =
+        document.getElementById("image");
 
-        event.preventDefault();
 
-        const file = imageInput.files[0];
+    const preview =
+        document.getElementById("preview");
 
-        if (!file) {
-            alert("Please select an image.");
-            return;
-        }
 
-        const formData = new FormData();
-        formData.append("image", file);
+    const previewContainer =
+        document.getElementById("previewContainer");
 
-        result.style.display = "block";
-        document.getElementById("label").textContent = "Analyzing...";
-        document.getElementById("confidence").textContent = "";
 
-        try {
+    const result =
+        document.getElementById("result");
 
-            const response = await fetch("/predict", {
-                method: "POST",
-                body: formData
-            });
 
-            const data = await response.json();
+    const label =
+        document.getElementById("label");
 
-            if (!response.ok) {
-                document.getElementById("label").innerHTML =
-                    '<span class="error">' + data.error + '</span>';
 
-                document.getElementById("confidence").textContent = "";
-                return;
+    const confidence =
+        document.getElementById("confidence");
+
+
+    const confidenceFill =
+        document.getElementById("confidenceFill");
+
+
+    const analyzeButton =
+        document.getElementById("analyzeButton");
+
+
+
+    /* Image Preview */
+
+    imageInput.addEventListener(
+        "change",
+        function () {
+
+            const file =
+                this.files[0];
+
+
+            if (file) {
+
+                preview.src =
+                    URL.createObjectURL(file);
+
+                previewContainer.style.display =
+                    "block";
+
             }
 
-            document.getElementById("label").textContent =
-                data.label;
-
-            document.getElementById("confidence").textContent =
-                "Confidence: " + data.confidence + "%";
-
-        } catch (error) {
-
-            document.getElementById("label").innerHTML =
-                '<span class="error">Unable to connect to server.</span>';
-
-            document.getElementById("confidence").textContent =
-                error.message;
         }
-    });
+    );
+
+
+
+    /* Form Submission */
+
+    form.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const file =
+                imageInput.files[0];
+
+
+            if (!file) {
+
+                alert(
+                    "Please select an image."
+                );
+
+                return;
+
+            }
+
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "image",
+                file
+            );
+
+
+            result.style.display =
+                "block";
+
+
+            label.innerHTML =
+                '<span class="loading"></span>Analyzing...';
+
+
+            confidence.textContent =
+                "Please wait while the AI analyzes your image.";
+
+
+            confidenceFill.style.width =
+                "0%";
+
+
+            analyzeButton.disabled =
+                true;
+
+
+            analyzeButton.innerHTML =
+                '<span class="loading"></span>Analyzing...';
+
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+                        "/predict",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
+                const contentType =
+                    response.headers.get(
+                        "content-type"
+                    ) || "";
+
+
+                let data;
+
+
+
+                /* JSON response */
+
+                if (
+                    contentType.includes(
+                        "application/json"
+                    )
+                ) {
+
+                    data =
+                        await response.json();
+
+                }
+
+                else {
+
+                    const serverResponse =
+                        await response.text();
+
+
+                    console.error(
+                        "Server returned:",
+                        serverResponse
+                    );
+
+
+                    throw new Error(
+                        "Server returned HTML instead of JSON. HTTP Status: "
+                        + response.status
+                    );
+
+                }
+
+
+
+                /* Backend Error */
+
+                if (!response.ok) {
+
+                    label.innerHTML =
+                        '<span class="error">' +
+                        (
+                            data.error ||
+                            "Prediction failed."
+                        ) +
+                        "</span>";
+
+
+                    confidence.textContent =
+                        "";
+
+
+                    confidenceFill.style.width =
+                        "0%";
+
+
+                    return;
+
+                }
+
+
+
+                /* Successful Prediction */
+
+                label.textContent =
+                    data.label ||
+                    "Unknown";
+
+
+                const confidenceValue =
+                    parseFloat(
+                        data.confidence
+                    );
+
+
+                confidence.textContent =
+                    "Confidence: " +
+                    (
+                        isNaN(confidenceValue)
+                            ? data.confidence
+                            : confidenceValue
+                    ) +
+                    "%";
+
+
+                if (
+                    !isNaN(
+                        confidenceValue
+                    )
+                ) {
+
+                    setTimeout(
+                        function () {
+
+                            confidenceFill.style.width =
+                                Math.min(
+                                    Math.max(
+                                        confidenceValue,
+                                        0
+                                    ),
+                                    100
+                                ) + "%";
+
+                        },
+                        100
+                    );
+
+                }
+
+
+            }
+
+
+            catch (error) {
+
+
+                console.error(
+                    "Prediction error:",
+                    error
+                );
+
+
+                label.innerHTML =
+                    '<span class="error">' +
+                    "⚠ Unable to connect to server" +
+                    "</span>";
+
+
+                confidence.textContent =
+                    error.message;
+
+
+                confidenceFill.style.width =
+                    "0%";
+
+            }
+
+
+            finally {
+
+
+                analyzeButton.disabled =
+                    false;
+
+
+                analyzeButton.innerHTML =
+                    "🔍 Analyze Image";
+
+            }
+
+        }
+    );
+
+
 </script>
+```
 
 </body>
+
 </html>
